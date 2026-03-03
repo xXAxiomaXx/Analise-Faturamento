@@ -19,7 +19,7 @@ def conectar_google_sheets():
     credenciais_dict = json.loads(st.secrets["google_credentials_json"])
     
     # O ficheiro credenciais.json deve estar na mesma pasta que este script
-    creds = Credentials.from_service_account_file("credenciais.json", scopes=SCOPES)
+    creds = Credentials.from_service_account_file(credenciais_dict, scopes=SCOPES)
     client = gspread.authorize(creds)
     
     # ATENÇÃO: Substitua pelos IDs reais das duas folhas de cálculo
@@ -177,4 +177,5 @@ def main():
                         st.markdown(f"- {paciente}")
 
 if __name__ == "__main__":
+
     main()
