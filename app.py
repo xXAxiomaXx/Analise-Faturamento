@@ -1,11 +1,10 @@
 import streamlit as st
 import pandas as pd
 import gspread
-from google.oauth2.service_account import Credentials
+import json
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import re
-import json
 
 # 1. Configuração da ligação ao Google Sheets
 SCOPES = [
@@ -15,16 +14,15 @@ SCOPES = [
 
 @st.cache_resource(show_spinner="A estabelecer ligação ao Google Sheets...")
 def conectar_google_sheets():
-    # Lê o conteúdo do JSON diretamente das variáveis seguras do Streamlit
+    # Lê o texto dos Secrets e converte para dicionário
     credenciais_dict = json.loads(st.secrets["google_credentials_json"])
     
-    # O ficheiro credenciais.json deve estar na mesma pasta que este script
-    creds = Credentials.from_service_account_file(credenciais_dict, scopes=SCOPES)
-    client = gspread.authorize(creds)
+    # Usa a função nativa do gspread exclusiva para dicionários
+    client = gspread.service_account_from_dict(credenciais_dict)
     
-    # ATENÇÃO: Substitua pelos IDs reais das duas folhas de cálculo
-    sheet1 = client.open_by_key("1iqIw5mXr9oibMC8tZq7Pti4cgjIeGe-SxrVloJcsaQ4")
-    sheet2 = client.open_by_key("1K_QoptXhXUY4E3_6cbhb0G1YWxaGjVIgy6bq_PD3U5w")
+    # ATENÇÃO: Substitua pelos seus IDs reais
+    sheet1 = client.open_by_key("COLE_O_ID_DA_PRIMEIRA_PLANILHA_AQUI")
+    sheet2 = client.open_by_key("COLE_O_ID_DA_SEGUNDA_PLANILHA_AQUI")
     
     return sheet1, sheet2
 
@@ -179,3 +177,4 @@ def main():
 if __name__ == "__main__":
 
     main()
+
