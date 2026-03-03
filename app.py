@@ -5,6 +5,7 @@ from google.oauth2.service_account import Credentials
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import re
+import json
 
 # 1. Configuração da ligação ao Google Sheets
 SCOPES = [
@@ -14,6 +15,9 @@ SCOPES = [
 
 @st.cache_resource(show_spinner="A estabelecer ligação ao Google Sheets...")
 def conectar_google_sheets():
+    # Lê o conteúdo do JSON diretamente das variáveis seguras do Streamlit
+    credenciais_dict = json.loads(st.secrets["google_credentials_json"])
+    
     # O ficheiro credenciais.json deve estar na mesma pasta que este script
     creds = Credentials.from_service_account_file("credenciais.json", scopes=SCOPES)
     client = gspread.authorize(creds)
